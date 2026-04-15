@@ -1,45 +1,76 @@
-# 🔍 VulnSight X - Advanced Web Pentesting Framework
+<div align="center">
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Node.js Version](https://img.shields.io/badge/node-%3E%3D16.0.0-brightgreen)](https://nodejs.org)
+![VulnSight X Banner](https://raw.githubusercontent.com/sigmaboysigmaboy888-prog/Vs-x/refs/heads/main/vsx.png)
 
-VulnSight X is a professional-grade web penetration testing tool with a modular architecture, real-time scanning capabilities, and comprehensive vulnerability detection.
+# 🔍 VulnSight X
 
-## 🚀 Features
+### *Advanced Web Penetration Testing Framework*
 
-### Core Capabilities
-- **Full Pentest Pipeline**: Recon → Crawl → Map → Scan → Analyze → Report
-- **Smart Crawler**: Headless browser crawling with depth control
-- **Attack Surface Mapping**: Automatic endpoint and parameter discovery
-- **Plugin-Based Scanner**: Easily extendable vulnerability detection modules
-- **Real-Time WebSocket**: Live scan progress and log streaming
-- **HTTP Interceptor**: Request capture, modification, and replay
+[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/vulnsight-x/vulnsight-x/releases)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Node.js](https://img.shields.io/badge/Node.js-18.x-339933.svg)](https://nodejs.org/)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+[![Stars](https://img.shields.io/github/stars/vulnsight-x/vulnsight-x?style=social)](https://github.com/vulnsight-x/vulnsight-x/stargazers)
 
-### Vulnerability Detection
-- ✅ SQL Injection (Error-based & Time-based)
-- ✅ Cross-Site Scripting (XSS)
-- ✅ Server-Side Request Forgery (SSRF)
-- ✅ Open Redirect
-- ✅ Missing Security Headers
-- ✅ Technology Fingerprinting
+**Professional-grade security assessment tool with modular architecture, real-time scanning, and enterprise-ready reporting**
 
-### Advanced Features
-- CVSS-like Risk Scoring
-- Passive/Active/Aggressive scan modes
-- Differential Response Analysis
-- HTML Report Generation
-- Dark Mode UI
-- Real-time Dashboard
+[Getting Started](#-getting-started) •
+[Features](#-core-features) •
+[Architecture](#-architecture) •
+[Documentation](#-documentation) •
+[Demo](#-demo)
 
-## 📦 Installation
+</div>
 
-```bash
-# Clone repository
-git clone https://github.com/yourusername/vulnsight-x.git
-cd vulnsight-x
+---
 
-# Install dependencies
-npm install
+## 🎯 Executive Summary
 
-# Start the application
-npm start
+**VulnSight X** is a comprehensive web penetration testing framework designed for security professionals, bug bounty hunters, and DevOps teams. Built with modern Node.js architecture, it delivers enterprise-grade vulnerability detection with a beautiful, intuitive interface.
+
+Unlike traditional scanners, VulnSight X implements a **complete pentest pipeline** inspired by industry leaders like Burp Suite and OWASP ZAP, making it suitable for both quick assessments and in-depth security audits.
+
+### Key Differentiators
+
+| Feature | VulnSight X | Traditional Scanners |
+|---------|-------------|---------------------|
+| **Full Pentest Pipeline** | ✅ Recon → Crawl → Map → Scan → Analyze | ❌ Basic scanning only |
+| **Modular Plugin System** | ✅ Extensible architecture | ⚠️ Limited customization |
+| **Real-time WebSocket** | ✅ Live progress streaming | ❌ Polling-based |
+| **HTTP Interceptor** | ✅ Request/Replay capability | ❌ Not available |
+| **CVSS Risk Scoring** | ✅ Dynamic scoring engine | ⚠️ Static severity |
+| **Modern UI** | ✅ Dark mode, responsive | ❌ Outdated interfaces |
+
+---
+
+## ✨ Core Features
+
+### 🔬 Advanced Scanning Engine
+
+```yaml
+Pipeline Stages:
+  Reconnaissance:
+    - Subdomain enumeration
+    - Technology fingerprinting
+    - Service detection
+  
+  Smart Crawling:
+    - Headless browser (Puppeteer)
+    - JavaScript rendering
+    - Form extraction
+    - Parameter discovery
+  
+  Attack Surface Mapping:
+    - Endpoint cataloging
+    - Parameter analysis
+    - Method detection
+  
+  Vulnerability Scanning:
+    - Plugin-based architecture
+    - Differential analysis
+    - False-positive reduction
+  
+  Risk Analysis:
+    - CVSS v3.1 scoring
+    - Priority ranking
+    - Exploitability metrics
