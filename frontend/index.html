@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VulnSight X</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            background: #0a0a1a;
+            background-image: 
+                linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(0deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        
+        /* Neon glow effects */
+        .neon-glow {
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.3), 0 0 20px rgba(0, 255, 255, 0.1);
+        }
+        
+        .neon-text {
+            text-shadow: 0 0 5px rgba(0, 255, 255, 0.5), 0 0 10px rgba(0, 255, 255, 0.3);
+        }
+        
+        .neon-border {
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            box-shadow: 0 0 8px rgba(0, 255, 255, 0.2);
+        }
+        
+        .neon-border:hover {
+            border-color: rgba(0, 255, 255, 0.8);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+        }
+        
+        /* Card style */
+        .glass-card {
+            background: rgba(10, 20, 40, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            border-color: rgba(0, 255, 255, 0.5);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
+        }
+        
+        /* Button styles */
+        .btn-primary {
+            background: linear-gradient(135deg, #0066ff 0%, #00ccff 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(0, 102, 255, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(0, 102, 255, 0.5);
+        }
+        
+        .btn-secondary {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 255, 0.4);
+            border-radius: 10px;
+            padding: 8px 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(0, 255, 255, 0.2);
+            border-color: rgba(0, 255, 255, 0.8);
+        }
+        
+        /* Navigation */
+        .nav-item {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .nav-item.active {
+            color: #00ffff;
+            text-shadow: 0 0 8px rgba(0, 255, 255, 0.5);
+        }
+        
+        .nav-item.active .nav-icon {
+            filter: drop-shadow(0 0 8px rgba(0, 255, 255, 0.5));
+        }
+        
+        /* Dropdown menu */
+        .dropdown-menu {
+            background: rgba(10, 20, 40, 0.95);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 255, 255, 0.1);
+        }
+        
+        .dropdown-item {
+            transition: all 0.2s ease;
+        }
+        
+        .dropdown-item:hover {
+            background: rgba(0, 255, 255, 0.1);
+            color: #00ffff;
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 255, 255, 0.05);
+            border-radius: 3px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 255, 255, 0.3);
+            border-radius: 3px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 255, 255, 0.6);
+        }
+        
+        /* Input styles */
+        .neon-input {
+            background: rgba(0, 20, 40, 0.6);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .neon-input:focus {
+            outline: none;
+            border-color: #00ffff;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+        }
+        
+        /* Progress bar */
+        .progress-bar-neon {
+            background: linear-gradient(90deg, #0066ff, #00ffff);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+        
+        /* Status badges */
+        .badge-critical {
+            background: rgba(255, 0, 0, 0.2);
+            border: 1px solid rgba(255, 0, 0, 0.5);
+            color: #ff4444;
+        }
+        
+        .badge-high {
+            background: rgba(255, 100, 0, 0.2);
+            border: 1px solid rgba(255, 100, 0, 0.5);
+            color: #ff8844;
+        }
+        
+        .badge-medium {
+            background: rgba(255, 200, 0, 0.2);
+            border: 1px solid rgba(255, 200, 0, 0.5);
+            color: #ffcc44;
+        }
+        
+        .badge-low {
+            background: rgba(0, 255, 100, 0.2);
+            border: 1px solid rgba(0, 255, 100, 0.5);
+            color: #44ff88;
+        }
+        
+        /* Animations */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .scanning-pulse {
+            animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 5px rgba(0, 255, 255, 0.2); }
+            50% { box-shadow: 0 0 20px rgba(0, 255, 255, 0.4); }
+        }
+        
+        .glow-animate {
+            animation: glow 2s ease-in-out infinite;
+        }
+        
+        /* Smooth transitions */
+        .page {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        
+        .page.hidden {
+            display: none;
+        }
+        
+        /* Table styles */
+        .vuln-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .vuln-table th {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+            color: #00ffff;
+            font-weight: 600;
+        }
+        
+        .vuln-table td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+        }
+        
+        .vuln-table tr:hover {
+            background: rgba(0, 255, 255, 0.05);
+        }
+        
+        /* Code editor style */
+        .code-editor {
+            background: #0a0a1a;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body class="text-gray-200">
+
+    <!-- Three Dots Menu (Top Right) -->
+    <div class="fixed top-4 right-4 z-50">
+        <div class="relative">
+            <button id="menuButton" class="glass-card p-2 rounded-full w-10 h-10 flex items-center justify-center neon-border hover:neon-glow transition-all">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
+                </svg>
+            </button>
+            <div id="dropdownMenu" class="dropdown-menu absolute right-0 mt-2 w-56 py-2 hidden">
+                <div class="dropdown-item px-4 py-2 cursor-pointer flex items-center gap-3" onclick="showSettings()">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    <span>Settings</span>
+                </div>
+                <div class="dropdown-item px-4 py-2 cursor-pointer flex items-center gap-3" onclick="exportAllData()">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    <span>Export Data</span>
+                </div>
+                <div class="dropdown-item px-4 py-2 cursor-pointer flex items-center gap-3" onclick="clearHistory()">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                    <span>Clear History</span>
+                </div>
+                <div class="border-t border-cyan-500/20 my-1"></div>
+                <div class="dropdown-item px-4 py-2 cursor-pointer flex items-center gap-3" onclick="showAbout()">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span>About</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="max-w-6xl mx-auto px-4 py-6 pb-24">
+        
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <img src="https://raw.githubusercontent.com/sigmaboysigmaboy888-prog/Vs-x/refs/heads/main/vsx.png" alt="VulnSight X" class="h-16 mx-auto mb-3">
+            <h1 class="text-3xl font-bold neon-text tracking-wide">VulnSight X</h1>
+            <p class="text-cyan-400/60 text-sm mt-1">Web Penetration Testing Framework</p>
+        </div>
+
+        <!-- Pages -->
+        <!-- Page 1: Dashboard -->
+        <div id="pageDashboard" class="page">
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div class="glass-card p-4 text-center">
+                    <div class="text-cyan-400/60 text-xs uppercase tracking-wide">Total Vulns</div>
+                    <div class="text-3xl font-bold neon-text" id="totalVulns">0</div>
+                </div>
+                <div class="glass-card p-4 text-center">
+                    <div class="text-red-400/60 text-xs uppercase tracking-wide">Critical</div>
+                    <div class="text-3xl font-bold text-red-400" id="criticalVulns">0</div>
+                </div>
+                <div class="glass-card p-4 text-center">
+                    <div class="text-orange-400/60 text-xs uppercase tracking-wide">High</div>
+                    <div class="text-3xl font-bold text-orange-400" id="highVulns">0</div>
+                </div>
+                <div class="glass-card p-4 text-center">
+                    <div class="text-cyan-400/60 text-xs uppercase tracking-wide">Risk Score</div>
+                    <div class="text-3xl font-bold neon-text" id="riskScore">0</div>
+                </div>
+            </div>
+
+            <!-- Risk Gauge -->
+            <div class="glass-card p-6 mb-6">
+                <h3 class="text-cyan-400 font-semibold mb-4 text-sm uppercase tracking-wide">Risk Assessment</h3>
+                <canvas id="riskGauge" height="200"></canvas>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="glass-card p-6">
+                <h3 class="text-cyan-400 font-semibold mb-4 text-sm uppercase tracking-wide">Recent Scans</h3>
+                <div id="recentScans" class="space-y-2">
+                    <div class="text-center text-cyan-400/40 py-8">No scans yet</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 2: Scanner -->
+        <div id="pageScanner" class="page hidden">
+            <div class="glass-card p-6 mb-6">
+                <h3 class="text-cyan-400 font-semibold mb-4 text-sm uppercase tracking-wide">New Scan</h3>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm text-cyan-400/80 mb-2">Target URL</label>
+                        <input type="text" id="targetUrl" class="neon-input w-full px-4 py-2 text-gray-200" placeholder="https://example.com">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm text-cyan-400/80 mb-2">Scan Mode</label>
+                        <select id="scanMode" class="neon-input w-full px-4 py-2 text-gray-200">
+                            <option value="Passive">Passive - Information gathering only</option>
+                            <option value="Active">Active - Standard vulnerability detection</option>
+                            <option value="Aggressive">Aggressive - Full attack simulation</option>
+                        </select>
+                    </div>
+                    
+                    <button onclick="startScan()" class="btn-primary w-full py-3 font-bold">
+                        Start Scan
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Scan Progress -->
+            <div id="scanProgress" class="glass-card p-6 mb-6 hidden">
+                <h3 class="text-cyan-400 font-semibold mb-4 text-sm uppercase tracking-wide">Progress</h3>
+                <div class="w-full bg-cyan-900/30 rounded-full h-2">
+                    <div id="progressBar" class="progress-bar-neon h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                </div>
+                <div id="scanLogs" class="mt-4 h-64 overflow-y-auto code-editor rounded-lg p-3 text-xs"></div>
+            </div>
+            
+            <!-- Scan Results -->
+            <div id="scanResults" class="glass-card p-6 hidden">
+                <h3 class="text-cyan-400 font-semibold mb-4 text-sm uppercase tracking-wide">Vulnerabilities</h3>
+                <div id="vulnTable" class="overflow-x-auto"></div>
+                <button onclick="downloadReport()" class="btn-secondary mt-4 w-full py-2">
+                    Download HTML Report
+                </button>
+            </div>
+        </div>
+
+        <!-- Page 3: Interceptor -->
+        <div id="pageInterceptor" class="page hidden">
+            <div class="glass-card p-6">
+                <div class="flex gap-3 mb-6">
+                    <button onclick="clearInterceptorForm()" class="btn-primary px-4 py-2 text-sm">New Request</button>
+                    <button onclick="showHistoryPanel()" class="btn-secondary px-4 py-2 text-sm">History</button>
+                </div>
+                
+                <div id="requestEditor">
+                    <div class="mb-4">
+                        <label class="block text-sm text-cyan-400/80 mb-2">Method</label>
+                        <select id="reqMethod" class="neon-input w-full px-4 py-2 text-gray-200">
+                            <option>GET</option><option>POST</option><option>PUT</option><option>DELETE</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm text-cyan-400/80 mb-2">URL</label>
+                        <input type="text" id="reqUrl" class="neon-input w-full px-4 py-2 text-gray-200" placeholder="https://example.com/api">
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm text-cyan-400/80 mb-2">Headers (JSON)</label>
+                        <textarea id="reqHeaders" rows="3" class="neon-input w-full px-4 py-2 code-editor text-sm" placeholder='{"User-Agent": "VulnSight-X"}'></textarea>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm text-cyan-400/80 mb-2">Body</label>
+                        <textarea id="reqBody" rows="5" class="neon-input w-full px-4 py-2 code-editor text-sm"></textarea>
+                    </div>
+                    
+                    <button onclick="sendRequest()" class="btn-primary w-full py-2">
+                        Send Request
+                    </button>
+                </div>
+                
+                <div id="responseDisplay" class="mt-6 hidden">
+                    <h4 class="text-cyan-400 font-semibold mb-3 text-sm uppercase tracking-wide">Response</h4>
+                    <div id="responseContent" class="glass-card p-4 code-editor text-sm overflow-x-auto"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 4: History -->
+        <div id="pageHistory" class="page hidden">
+            <div class="glass-card p-6">
+                <h3 class="text-cyan-400 font-semibold mb-4 text-sm uppercase tracking-wide">Scan History</h3>
+                <div id="historyList" class="space-y-3">
+                    <div class="text-center text-cyan-400/40 py-8">No scan history yet</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 5: Settings -->
+        <div id="pageSettings" class="page hidden">
+            <div class="glass-card p-6">
+                <h3 class="text-cyan-400 font-semibold mb-4 text-sm uppercase tracking-wide">Settings</h3>
+                
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between py-3 border-b border-cyan-500/20">
+                        <div>
+                            <div class="font-medium">Request Timeout</div>
+                            <div class="text-xs text-cyan-400/50">Default: 30 seconds</div>
+                        </div>
+                        <input type="number" id="timeoutSetting" class="neon-input w-24 px-3 py-1 text-center" value="30">
+                    </div>
+                    
+                    <div class="flex items-center justify-between py-3 border-b border-cyan-500/20">
+                        <div>
+                            <div class="font-medium">Max Crawl Depth</div>
+                            <div class="text-xs text-cyan-400/50">Default: 3 levels</div>
+                        </div>
+                        <input type="number" id="depthSetting" class="neon-input w-24 px-3 py-1 text-center" value="3">
+                    </div>
+                    
+                    <div class="flex items-center justify-between py-3 border-b border-cyan-500/20">
+                        <div>
+                            <div class="font-medium">Save Results Automatically</div>
+                            <div class="text-xs text-cyan-400/50">Auto-save scan results to JSON</div>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="autoSaveSetting" class="sr-only peer" checked>
+                            <div class="w-11 h-6 bg-cyan-900 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-cyan-400 after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+                        </label>
+                    </div>
+                    
+                    <button onclick="saveSettings()" class="btn-primary w-full py-2 mt-4">Save Settings</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 6: About -->
+        <div id="pageAbout" class="page hidden">
+            <div class="glass-card p-6 text-center">
+                <img src="https://raw.githubusercontent.com/sigmaboysigmaboy888-prog/Vs-x/refs/heads/main/vsx.png" alt="VulnSight X" class="h-20 mx-auto mb-4">
+                <h2 class="text-2xl font-bold neon-text mb-2">VulnSight X</h2>
+                <p class="text-cyan-400/60 mb-4">Version 1.0.0</p>
+                <p class="text-sm text-gray-400 mb-6">
+                    Web Penetration Testing Framework with modular architecture.<br>
+                    Built with Node.js, Express, WebSocket, and Puppeteer.
+                </p>
+                <div class="border-t border-cyan-500/20 pt-4">
+                    <p class="text-xs text-cyan-400/40">© 2024 VulnSight X | MIT License</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation Bar -->
+        <div class="fixed bottom-0 left-0 right-0 glass-card rounded-t-2xl border-t border-cyan-500/30" style="background: rgba(10, 20, 40, 0.95); backdrop-filter: blur(15px);">
+            <div class="flex justify-around items-center py-2 max-w-md mx-auto">
+                <div class="nav-item flex flex-col items-center p-2" data-page="dashboard">
+                    <svg class="nav-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                    </svg>
+                    <span class="text-xs mt-1">Home</span>
+                </div>
+                <div class="nav-item flex flex-col items-center p-2" data-page="scanner">
+                    <svg class="nav-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    <span class="text-xs mt-1">Scan</span>
+                </div>
+                <div class="nav-item flex flex-col items-center p-2" data-page="interceptor">
+                    <svg class="nav-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
+                    </svg>
+                    <span class="text-xs mt-1">Proxy</span>
+                </div>
+                <div class="nav-item flex flex-col items-center p-2" data-page="history">
+                    <svg class="nav-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span class="text-xs mt-1">History</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+  </html>
